@@ -1,0 +1,10 @@
+---
+server:
+  protocol: unix
+  socket: /tmp/secretbox.sock
+
+secrets:
+  - name: secret1
+    source: onepassword
+    label: test:SecretKey
+    kind: password
