@@ -12,6 +12,13 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+var (
+	appVersion      = "n/a (dev build)"
+	buildTimestamp  = "n/a (dev build)"
+	commitTimestamp = "n/a (dev build)"
+	gitCommit       = "n/a (dev build)"
+)
+
 type spec struct {
 	Protocol     string `arg:"-p,env:LISTEN_PROTOCOL" help:"listen protocol: unix or tcp" default:"unix"`
 	ListenSocket string `arg:"-l,env:LISTEN_SOCKET" help:"listen socket: unix domain socket path or TCP port number" default:"/tmp/secretbox.sock"`
