@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/teran/secretbox/presenter/grpc/proto"
+	proto "github.com/teran/secretbox/presenter/grpc/proto/v1"
 	"github.com/teran/secretbox/service"
 )
 
