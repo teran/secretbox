@@ -6,10 +6,11 @@ import (
 	"net"
 
 	arg "github.com/alexflint/go-arg"
-
-	"github.com/teran/secretbox/presenter/grpc/proto"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/teran/secretbox/presenter/grpc/proto"
 )
 
 var (
@@ -30,6 +31,13 @@ func main() {
 	cfg := spec{}
 	arg.MustParse(&cfg)
 
+	log.WithFields(log.Fields{
+		"version":          appVersion,
+		"build_timestamp":  buildTimestamp,
+		"commit_timestamp": commitTimestamp,
+		"git_commit":       gitCommit,
+	}).Trace("running secretbox-cli")
+
 	ctx := context.TODO()
 
 	dialer := func(ctx context.Context, addr string) (net.Conn, error) {
@@ -37,12 +45,10 @@ func main() {
 		return d.DialContext(ctx, cfg.Protocol, cfg.ListenSocket)
 	}
 
-	conn, err := grpc.Dial(
+	conn, err := grpc.NewClient(
 		cfg.ListenSocket,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-		grpc.WithContextDialer(dialer),
-	)
+		grpc.WithContextDialer(dialer))
 	if err != nil {
 		panic(err)
 	}

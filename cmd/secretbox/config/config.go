@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 
 	yaml "gopkg.in/yaml.v3"
 
@@ -27,7 +27,7 @@ type Config struct {
 }
 
 func NewFromFile(filename string) (*Config, error) {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
