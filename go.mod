@@ -11,7 +11,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/teran/go-grpctest v0.0.6
 	github.com/teran/go-onepassword-cli v0.0.1
-	google.golang.org/grpc v1.69.2
+	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.3
 	gopkg.in/yaml.v3 v3.0.1
 )
