@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	grpctest "github.com/teran/go-grpctest"
 
-	"github.com/teran/secretbox/presenter/grpc/proto"
+	proto "github.com/teran/secretbox/presenter/grpc/proto/v1"
 	"github.com/teran/secretbox/service"
 )
 
