@@ -1,7 +1,7 @@
 module github.com/teran/secretbox
 
 go 1.22.3
-toolchain go1.23.7
+toolchain go1.24.1
 
 require (
 	github.com/alexflint/go-arg v1.5.1
@@ -11,7 +11,7 @@ require (
 	github.com/teran/go-grpctest v0.0.6
 	github.com/teran/go-onepassword-cli v0.0.1
 	google.golang.org/grpc v1.71.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.6
 	gopkg.in/yaml.v3 v3.0.1
 )
 
