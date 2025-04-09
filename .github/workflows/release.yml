@@ -1,16 +1,10 @@
 ---
-name: verify
+name: release
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-      - synchronize
+    tags:
+      - 'v*'
 
 jobs:
   buf:
@@ -28,10 +22,6 @@ jobs:
 
   golangci:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
-      checks: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -77,11 +67,27 @@ jobs:
         run: go generate -v ./...
       - name: Test with the Go CLI
         run: go test ./...
+      - name: Build
+        run: go build -v ./...
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    needs:
+      - buf
+      - markdownlint
+      - golangci
+      - unittests
     steps:
+      - name: Define build timestamp
+        id: timestamp
+        run: echo "::set-output name=now::$(date -u +'%Y%m%d%H%M%S')"
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -98,11 +104,11 @@ jobs:
         run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
       - name: Generate the code
         run: go generate -v ./...
-      - name: Build project against .goreleaser.yaml
+      - name: Build & Publish release release
         uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: build --snapshot
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

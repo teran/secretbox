@@ -52,7 +52,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer conn.Close()
+	defer func() { err = conn.Close() }()
 
 	client := proto.NewSecretBoxServiceClient(conn)
 	resp, err := client.GetSecret(ctx, &proto.GetSecretRequest{
