@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/resolver"
 
 	proto "github.com/teran/secretbox/presenter/grpc/proto/v1"
 )
@@ -41,14 +42,15 @@ func main() {
 	ctx := context.TODO()
 
 	dialer := func(ctx context.Context, addr string) (net.Conn, error) {
-		var d net.Dialer
-		return d.DialContext(ctx, cfg.Protocol, cfg.ListenSocket)
+		return (&net.Dialer{}).DialContext(ctx, cfg.Protocol, cfg.ListenSocket)
 	}
 
 	conn, err := grpc.NewClient(
 		cfg.ListenSocket,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithContextDialer(dialer))
+		grpc.WithContextDialer(dialer),
+		grpc.WithResolvers(&builder{}),
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -65,3 +67,15 @@ func main() {
 
 	fmt.Println(resp.GetSecret())
 }
+
+type builder struct{}
+
+func (*builder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
+	return nil, cc.UpdateState(resolver.State{Addresses: []resolver.Address{{Addr: target.Endpoint()}}})
+}
+
+func (*builder) Scheme() string {
+	return ""
+}
+
+var _ resolver.Builder = (*builder)(nil)
