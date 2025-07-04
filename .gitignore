@@ -22,3 +22,6 @@ go.work
 
 # goreleaser binaries
 dist/
+
+# protobuf generated libraries
+*.pb.go
