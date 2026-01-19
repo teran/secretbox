@@ -7,7 +7,7 @@ toolchain go1.24.2
 require (
 	github.com/alexflint/go-arg v1.5.1
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
 	github.com/teran/go-grpctest v0.0.6
 	github.com/teran/go-onepassword-cli v0.0.1
